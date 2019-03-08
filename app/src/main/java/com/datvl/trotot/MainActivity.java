@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getAPI(){
         this.listPost = new ArrayList<>();
-        String url ="http://192.168.0.108/trotot/public/list-posts";
+        String url ="http://192.168.43.230/trotot/public/list-posts";
         RequestQueue queue = Volley.newRequestQueue(getApplication());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

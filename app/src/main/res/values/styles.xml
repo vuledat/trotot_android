@@ -9,6 +9,7 @@
         <item name="actionBarSize">36dip</item>
         <item name="android:textColorPrimary">@color/colorGreen</item>
         <item name="android:textColorSecondary">@color/colorGrey</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_green_24dp</item>
     </style>
 
     <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">

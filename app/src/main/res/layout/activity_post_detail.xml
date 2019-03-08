@@ -86,10 +86,10 @@
 
                     <ImageView
                         android:layout_width="100dp"
-                        android:layout_height="50dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:layout_weight="3"
-                        android:src="@drawable/ic_check_red_24dp" />
+                        android:src="@drawable/heart" />
 
 
                 </LinearLayout>
@@ -150,38 +150,5 @@
 
         </ScrollView>
     </android.support.constraint.ConstraintLayout>
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:layout_width="83dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            android:background="@null"
-            android:drawableLeft="@drawable/ic_call_green_24dp"
-            android:text="" />
-
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            android:background="@null"
-            android:drawableLeft="@drawable/ic_message_green_24dp"
-            android:text="" />
-
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
