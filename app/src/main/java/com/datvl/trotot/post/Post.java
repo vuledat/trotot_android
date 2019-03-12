@@ -9,11 +9,11 @@ public class Post implements Serializable {
     private int price;
     private String image;
     private String content;
-    private Date time;
+    private String time;
     private String address;
     private int scale;
 
-    public Post(int id, String name, int price, String image, String content, String address, Date time, int scale) {
+    public Post(int id, String name, int price, String image, String content, String address, String time, int scale) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -24,11 +24,11 @@ public class Post implements Serializable {
         this.scale = scale;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

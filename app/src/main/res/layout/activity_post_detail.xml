@@ -77,11 +77,12 @@
                             android:textSize="17sp" />
 
                         <TextView
+                            android:id="@+id/timeAgo"
                             android:layout_width="358dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="1 phút trước"
-                            android:textColor="@color/design_default_color_primary_dark" />
+                            android:textColor="@color/colorGrey" />
                     </LinearLayout>
 
                     <ImageView
@@ -132,7 +133,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Vũ Lê Đạt"
-                            android:textColor="@color/design_default_color_primary_dark"
+                            android:textColor="@color/colorGrey"
                             android:textSize="17sp" />
 
                         <TextView
@@ -146,7 +147,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="4 Mỗ Lao, Hà "
-                            android:textColor="@color/design_default_color_primary_dark" />
+                            android:textColor="@color/colorGrey" />
                     </LinearLayout>
 
                 </LinearLayout>
