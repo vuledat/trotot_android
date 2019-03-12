@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.datvl.trotot.library.NumberFormat;
 import com.datvl.trotot.post.Post;
 import com.squareup.picasso.Picasso;
 
@@ -35,14 +37,15 @@ public class PostDetail extends AppCompatActivity {
         final ImageView imgPost = (ImageView) findViewById(R.id.imgPost);
         final TextView txtPrice = (TextView) findViewById(R.id.price);
         final TextView txtContent = (TextView) findViewById(R.id.content);
+        final TextView txtScale = (TextView) findViewById(R.id.post_scale);
 
         namePost.setText(post.getName());
         Picasso.get()
                 .load(post.getImage())
                 .into(imgPost);
         txtContent.setText(post.getContent());
-        txtPrice.setText("" + post.getPrice());
-
+        txtPrice.setText("" + NumberFormat.getFormatedNum((int) post.getPrice()) + " đ");
+        txtScale.setText("" + post.getScale() + ": " + getString(R.string.met));
     }
 
     @Override

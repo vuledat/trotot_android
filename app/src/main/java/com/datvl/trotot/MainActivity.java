@@ -1,11 +1,13 @@
 package com.datvl.trotot;
 
 import android.app.FragmentManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -32,11 +34,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import com.datvl.trotot.api.GetApi;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     List<Post> listPost;
+    private String url = "http://192.168.43.230/trotot/public/list-posts";
 
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     getIntent().putExtra("ListPost", (Serializable) listPost);
+//                    Log.d("DatTESTAPI", "onResponse: " + GetApi.getAPI("http://192.168.43.230/trotot/public/list-posts", getApplication()));
 
                     FragmentHome fragmentHome = new FragmentHome();
                     fragmentTransaction.replace(R.id.content,fragmentHome);
@@ -75,8 +80,47 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getAPI();
+        String response = GetApi.getAPI(url, getApplication());
+        Log.d("getAPI", "getAPI: " + response);
+//        GetApi.getAPI(url, getApplication());
+//        Log.d("Dat", "onResponse: " + response);
 
+
+//        JSONObject obj = null;
+//        try {
+//            obj = new JSONObject(response.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            List<String> list = new ArrayList<String>();
+//            JSONArray array = null;
+//            array = obj.getJSONArray("data");
+//
+//            for(int i = 0 ; i < array.length() ; i++){
+//                int price = array.getJSONObject(i).getString("price") == null ? 0 : Integer.parseInt(array.getJSONObject(i).getString("price"));
+//                int scale = array.getJSONObject(i).getString("scale") == null ? 0 : Integer.parseInt(array.getJSONObject(i).getString("scale"));
+//                String name = array.getJSONObject(i).getString("name") == null ? "" : array.getJSONObject(i).getString("name");
+//                String image = array.getJSONObject(i).getString("image") == null ? "": array.getJSONObject(i).getString("image");
+//                String content = array.getJSONObject(i).getString("content") == null ? "" : array.getJSONObject(i).getString("content") ;
+//                String address = array.getJSONObject(i).getString("address") == null ? "" : array.getJSONObject(i).getString("address");
+//
+//
+//                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                Date time = dateFormat.parse(array.getJSONObject(i).getString("created_at"));
+//
+//                listPost.add(new Post(i,name, price , image, content, address, time, scale));
+//
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+
+//        Log.d("Dat", "onResponse: " + GetApi.getAPI(url, getApplication()));
+//        getAPI();
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -103,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
                             for(int i = 0 ; i < array.length() ; i++){
                                 int price = array.getJSONObject(i).getString("price") == null ? 0 : Integer.parseInt(array.getJSONObject(i).getString("price"));
+                                int scale = array.getJSONObject(i).getString("scale") == null ? 0 : Integer.parseInt(array.getJSONObject(i).getString("scale"));
                                 String name = array.getJSONObject(i).getString("name") == null ? "" : array.getJSONObject(i).getString("name");
                                 String image = array.getJSONObject(i).getString("image") == null ? "": array.getJSONObject(i).getString("image");
                                 String content = array.getJSONObject(i).getString("content") == null ? "" : array.getJSONObject(i).getString("content") ;
@@ -112,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 Date time = dateFormat.parse(array.getJSONObject(i).getString("created_at"));
 
-                                listPost.add(new Post(i,name, price , image, content, address, time));
+                                listPost.add(new Post(i,name, price , image, content, address, time, scale));
 
                             }
                         } catch (JSONException e) {

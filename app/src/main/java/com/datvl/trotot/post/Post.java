@@ -11,9 +11,9 @@ public class Post implements Serializable {
     private String content;
     private Date time;
     private String address;
+    private int scale;
 
-
-    public Post(int id, String name, int price, String image, String content, String address, Date time) {
+    public Post(int id, String name, int price, String image, String content, String address, Date time, int scale) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -21,6 +21,7 @@ public class Post implements Serializable {
         this.content = content;
         this.address = address;
         this.time = time;
+        this.scale = scale;
     }
 
     public Date getTime() {
@@ -49,6 +50,14 @@ public class Post implements Serializable {
 
     public String getImage() {
         return image;
+    }
+
+    public int getScale() {
+        return scale;
+    }
+
+    public void setScale(int scale) {
+        this.scale = scale;
     }
 
     public void setImage(String image) {

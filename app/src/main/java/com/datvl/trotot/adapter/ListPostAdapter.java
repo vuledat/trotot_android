@@ -12,11 +12,11 @@ import android.widget.Toast;
 
 import com.datvl.trotot.PostDetail;
 import com.datvl.trotot.R;
+import com.datvl.trotot.library.NumberFormat;
 import com.datvl.trotot.library.TimeAgo;
 import com.datvl.trotot.post.Post;
 import com.squareup.picasso.Picasso;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,10 +48,10 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
         Date time = data.get(position).getTime();
 
         holder.txtUserName.setText(name_sub);
-        holder.txtPrice.setText("" + getFormatedNum((int) price) + " đ");
+        holder.txtPrice.setText("" + NumberFormat.getFormatedNum((int) price) + " đ");
         holder.txtAddress.setText(address);
         String timeAgo = TimeAgo.getTimeAgo(DateToDays(time));
-        holder.txtTime.setText(timeAgo);
+        holder.txtTime.setText(timeAgo + " | ");
 
         Picasso.get()
                 .load(data.get(position).getImage())
@@ -60,7 +60,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), data.get(position).getName(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(v.getContext(), data.get(position).getName(), Toast.LENGTH_LONG).show();
                 Intent intent= new Intent(v.getContext(), PostDetail.class);
 
                 intent.putExtra("post", data.get(position));
@@ -92,9 +92,9 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
         }
     }
 
-    public String getFormatedNum(int amount){
-        return NumberFormat.getNumberInstance(Locale.US).format(amount);
-    }
+//    public String getFormatedNum(int amount){
+//        return NumberFormat.getNumberInstance(Locale.US).format(amount);
+//    }
 
     public int DateToDays (Date date){
         //  convert a date to an integer and back again

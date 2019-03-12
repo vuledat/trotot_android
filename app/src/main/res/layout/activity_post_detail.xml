@@ -102,11 +102,23 @@
                     android:paddingRight="8dp"
                     android:weightSum="5">
 
-                    <ImageView
+                    <android.support.v7.widget.CardView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/parent_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="4" />
+                        android:layout_weight="4"
+                        app:cardCornerRadius="10dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:src="@drawable/user_active"
+                            />
+                    </android.support.v7.widget.CardView>
+
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -145,9 +157,33 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
-                    android:text="content" />
-            </LinearLayout>
+                    android:text="content"
+                    android:background="@drawable/template_edit_text_border"
+                    />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    >
+
+                    <ImageView
+                        android:src="@drawable/scale"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/post_scale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  dien tich: "
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
         </ScrollView>
     </android.support.constraint.ConstraintLayout>
 
