@@ -19,4 +19,16 @@
         app:showAsAction="always"
         android:title="Gọi điện" />
 
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_call_green_24dp"
+        android:title="Ẩn bài viết" />
+
+    <item
+        android:id="@+id/report"
+        android:icon="@drawable/ic_call_green_24dp"
+        android:title="Phản hồi" />
+
+
+
 </menu>

@@ -39,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     List<Post> listPost;
+//    private String url = "http://192.168.43.230/trotot/public/list-posts";
     private String url = "http://192.168.0.108/trotot/public/list-posts";
+
     GetApi getApi;
     String post = null;
 
@@ -109,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
     }
 
     public String getFormatedNum(int amount){

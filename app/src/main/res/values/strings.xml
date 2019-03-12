@@ -6,4 +6,5 @@
     <string name="title_setting">Setting</string>
     <string name="title_message">Message</string>
     <string name="met">&#13217;</string>
+    <string name="url">http://192.168.0.108/trotot/</string>
 </resources>

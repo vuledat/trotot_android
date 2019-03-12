@@ -45,13 +45,12 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
         String name_sub = name.length() > 40 ? name.substring(0,40) + "..." : name;
         int price = data.get(position).getPrice();
         String address = data.get(position).getAddress();
-//        Date time = data.get(position).getTime();
+        String timeAgo = data.get(position).getTime();
 
         holder.txtUserName.setText(name_sub);
         holder.txtPrice.setText("" + NumberFormat.getFormatedNum((int) price) + " đ");
         holder.txtAddress.setText(address);
-//        String timeAgo = TimeAgo.getTimeAgo(DateToDays(time));
-//        holder.txtTime.setText(timeAgo + " | ");
+        holder.txtTime.setText(timeAgo + " | ");
 
         Picasso.get()
                 .load(data.get(position).getImage())
@@ -81,7 +80,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         TextView txtUserName, txtPrice, txtAddress, txtTime;
-        ImageView imgPost;
+        ImageView imgPost, imgHeart;
         public RecyclerViewHolder(View itemView) {
             super(itemView);
             txtUserName = (TextView) itemView.findViewById(R.id.user_name);

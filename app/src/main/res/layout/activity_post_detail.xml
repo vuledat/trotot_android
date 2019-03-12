@@ -41,7 +41,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="Title"
+                    android:text="..."
                     android:textColor="#000"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +54,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/template_edit_text_border"
+                    android:background="@drawable/template_edit_text_border_grey"
                     android:orientation="horizontal"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
@@ -72,7 +72,8 @@
                             android:layout_width="360dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="1000 000"
+                            android:text="..."
+                            android:textStyle="bold"
                             android:textColor="@color/colorRed"
                             android:textSize="17sp" />
 
@@ -86,6 +87,7 @@
                     </LinearLayout>
 
                     <ImageView
+                        android:id="@+id/post_heart_active"
                         android:layout_width="100dp"
                         android:layout_height="18dp"
                         android:layout_gravity="center"
@@ -99,6 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:weightSum="5">
@@ -109,11 +112,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="4"
-                        app:cardCornerRadius="10dp">
+                        app:cardCornerRadius="35dp">
 
                         <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:id="@+id/avatar"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
                             android:layout_gravity="center"
                             android:src="@drawable/user_active"
                             />
@@ -122,6 +126,7 @@
 
 
                     <LinearLayout
+                        android:paddingLeft="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -129,38 +134,46 @@
                         android:weightSum="3">
 
                         <TextView
+                            android:id="@+id/name_user"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Vũ Lê Đạt"
+                            android:text="..."
+                            android:textColor="@color/colorBlack"
+                            android:inputType = "textCapCharacters"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/date_sign_up"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:textColor="@color/colorGrey"
-                            android:textSize="17sp" />
+                            android:text="..." />
 
                         <TextView
+                            android:id="@+id/address_user"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Ngày tham gia" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="4 Mỗ Lao, Hà "
+                            android:text="..."
                             android:textColor="@color/colorGrey" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/content"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="content"
-                    android:background="@drawable/template_edit_text_border"
-                    />
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+                    <TextView
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="..."
+                        android:background="@drawable/template_edit_text_border"
+                        />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -169,6 +182,7 @@
                     android:layout_marginTop="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
+                    android:layout_marginBottom="80dp"
                     >
 
                     <ImageView
@@ -179,7 +193,7 @@
                         android:id="@+id/post_scale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="  dien tich: "
+                        android:text="..."
                         />
 
                 </LinearLayout>
