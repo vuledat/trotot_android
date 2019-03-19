@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -18,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.datvl.trotot.common.Common;
 import com.datvl.trotot.fragment.FragmentHome;
 import com.datvl.trotot.fragment.FragmentSetting;
 import com.datvl.trotot.post.Post;
@@ -39,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     List<Post> listPost;
-//    private String url = "http://192.168.43.230/trotot/public/list-posts";
-    private String url = "http://192.168.0.108/trotot/public/list-posts";
-
+    Common cm;
+    public String url = cm.getUrlListPosts();
+    ProgressBar pb;
     GetApi getApi;
     String post = null;
 
@@ -59,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                     FragmentHome fragmentHome = new FragmentHome();
                     fragmentTransaction.replace(R.id.content,fragmentHome);
                     fragmentTransaction.commit();
+
+                    pb = findViewById(R.id.progressBar);
+                    pb.setVisibility(View.GONE);
 
                     return true;
                 case R.id.navigation_message:
@@ -80,9 +86,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         GetApi getApi = new GetApi(url, getApplication(), new OnEventListener() {
             @Override
             public void onSuccess(JSONArray object) {
+
                 listPost = new ArrayList<>();
                 for (int i=0 ; i< object.length() ; i++){
                     try {
@@ -111,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
     }
 
     public String getFormatedNum(int amount){

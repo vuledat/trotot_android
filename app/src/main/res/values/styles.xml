@@ -1,7 +1,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,6 +10,7 @@
         <item name="android:textColorPrimary">@color/colorGreen</item>
         <item name="android:textColorSecondary">@color/colorGrey</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_green_24dp</item>
+        <item name="android:actionMenuTextColor">@color/colorBlack</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
     </style>
 

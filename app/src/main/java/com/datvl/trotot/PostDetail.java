@@ -3,10 +3,12 @@ package com.datvl.trotot;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -16,13 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.datvl.trotot.api.GetApi;
+import com.datvl.trotot.common.Common;
 import com.datvl.trotot.library.NumberFormat;
 import com.datvl.trotot.post.Post;
 import com.squareup.picasso.Picasso;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,14 +36,26 @@ import org.json.JSONObject;
 public class PostDetail extends AppCompatActivity {
 
     Post post;
-//    private String url = "http://192.168.43.230/trotot/public/post/";
-    private String url = "http://192.168.0.108/trotot/public/post/";
+    Common cm;
+    private ProgressDialog pg = null;
+    public String url = cm.getUrlPost();
     String phone = "191";
 
+    ConstraintLayout postDetail;
+    ProgressBar pb;
+
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+
+        pb = (ProgressBar)findViewById(R.id.progressBarDetail);
+        postDetail = (ConstraintLayout)findViewById(R.id.post_detail);
+
+//      ẩn nội dung trước khi load được dữ liệu
+        postDetail.setVisibility(View.GONE);
+
         Intent intent = getIntent();
         post = (Post) intent.getSerializableExtra("post");
 
@@ -80,6 +97,9 @@ public class PostDetail extends AppCompatActivity {
                     txtUserName.setText("" + jsonObject.getString("user_name"));
                     phone = jsonObject.getString("user_phone");
 
+                    postDetail.setVisibility(View.VISIBLE);
+                    pb.setVisibility(View.GONE);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -117,10 +137,7 @@ public class PostDetail extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.button_call:
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:191"));
-                    startActivity(callIntent);
-//                    return true;
+                  startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone)));
                 return true;
             case R.id.button_share:
 //                showHelp();

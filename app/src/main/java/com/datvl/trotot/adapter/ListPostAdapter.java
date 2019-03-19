@@ -1,5 +1,6 @@
 package com.datvl.trotot.adapter;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,7 +41,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerViewHolder holder, final int position) {
         String name = data.get(position).getName();
         String name_sub = name.length() > 40 ? name.substring(0,40) + "..." : name;
         int price = data.get(position).getPrice();
@@ -58,13 +59,47 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
                 .into(holder.imgPost);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 //                Toast.makeText(v.getContext(), data.get(position).getName(), Toast.LENGTH_LONG).show();
-                Intent intent= new Intent(v.getContext(), PostDetail.class);
+                final Intent intent= new Intent(v.getContext(), PostDetail.class);
 
                 intent.putExtra("post", data.get(position));
 
-                v.getContext().startActivity(intent);
+//                v.getContext().startActivity(intent);
+
+                Thread welcomeThread = new Thread() {
+
+//                final ProgressDialog pg = ProgressDialog.show(v.getContext(), "...", "...");
+
+
+                    @Override
+                    public void run() {
+                        try {
+                            super.run();
+                            sleep(500);
+                        } catch (Exception e) {
+
+                        } finally {
+                            v.getContext().startActivity(intent);
+                        }
+                    }
+                };
+                welcomeThread.start();
+            }
+        });
+
+        holder.imgHeart.setOnClickListener(new View.OnClickListener() {
+            int checked = 0;
+            @Override
+            public void onClick(View v) {
+                if (checked == 0){
+                    holder.imgHeart.setImageResource(R.drawable.heart_active);
+                    checked = 1;
+                }
+                else{
+                    holder.imgHeart.setImageResource(R.drawable.heart);
+                    checked =0;
+                }
             }
         });
     }
@@ -88,12 +123,10 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
             imgPost = (ImageView) itemView.findViewById(R.id.img_view);
             txtAddress = (TextView) itemView.findViewById(R.id.address);
             txtTime = (TextView) itemView.findViewById(R.id.time);
+            imgHeart = (ImageView) itemView.findViewById(R.id.item_heart);
+
         }
     }
-
-//    public String getFormatedNum(int amount){
-//        return NumberFormat.getNumberInstance(Locale.US).format(amount);
-//    }
 
     public int DateToDays (Date date){
         //  convert a date to an integer and back again
