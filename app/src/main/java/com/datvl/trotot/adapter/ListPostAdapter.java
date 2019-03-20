@@ -65,26 +65,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.Recycl
 
                 intent.putExtra("post", data.get(position));
 
-//                v.getContext().startActivity(intent);
-
-                Thread welcomeThread = new Thread() {
-
-//                final ProgressDialog pg = ProgressDialog.show(v.getContext(), "...", "...");
-
-
-                    @Override
-                    public void run() {
-                        try {
-                            super.run();
-                            sleep(500);
-                        } catch (Exception e) {
-
-                        } finally {
-                            v.getContext().startActivity(intent);
-                        }
-                    }
-                };
-                welcomeThread.start();
+                v.getContext().startActivity(intent);
             }
         });
 

@@ -1,16 +1,23 @@
 package com.datvl.trotot.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 //import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.bottomappbar.BottomAppBar;
+import android.support.design.internal.BottomNavigationMenu;
+import android.support.design.internal.BottomNavigationMenuView;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,6 +50,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     Common cm;
     public String url = cm.getUrlListPosts();
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,6 +63,23 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         ListPostAdapter viewAdapter = new ListPostAdapter(listPost);
         recyclerView.setAdapter(viewAdapter);
+
+
+        final BottomNavigationView navigation = (BottomNavigationView) view.findViewById(R.id.navigation);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    // Scrolling up
+                    Log.d("scroll", "scroll ");
+                    navigation.setBehaviorTranslationEnabled(true);
+
+                } else {
+                    // Scrolling down
+                }
+            }
+        });
 
         //pull refresh
         final SwipeRefreshLayout swipeLayout;
@@ -109,10 +134,12 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public void onRefresh() {
 
     }
+
 }
