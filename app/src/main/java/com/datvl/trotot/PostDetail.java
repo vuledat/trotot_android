@@ -1,35 +1,27 @@
 package com.datvl.trotot;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.datvl.trotot.api.GetApi;
 import com.datvl.trotot.common.Common;
 import com.datvl.trotot.library.NumberFormat;
 import com.datvl.trotot.post.Post;
 import com.squareup.picasso.Picasso;
-import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,9 +34,12 @@ public class PostDetail extends AppCompatActivity {
     private ProgressDialog pg = null;
     public String url = cm.getUrlPost();
     String phone = "191";
+    Button btn_call, btn_sms, btn_chat;
 
     ConstraintLayout postDetail;
     ProgressBar pb;
+    Animation animation;
+
 
     @SuppressLint("WrongConstant")
     @Override
@@ -54,6 +49,8 @@ public class PostDetail extends AppCompatActivity {
 
         pb = (ProgressBar)findViewById(R.id.progressBarDetail);
         postDetail = (ConstraintLayout)findViewById(R.id.post_detail);
+        animation = AnimationUtils.loadAnimation(getApplication(), R.anim.scale_list);
+
 
 //      ẩn nội dung trước khi load được dữ liệu
         postDetail.setVisibility(View.GONE);
@@ -63,7 +60,7 @@ public class PostDetail extends AppCompatActivity {
 
         final TextView namePost = (TextView) findViewById(R.id.text_message);
         final ImageView imgPost = (ImageView) findViewById(R.id.imgPost);
-        final ImageView imgHeart = (ImageView) findViewById(R.id.post_heart_active);
+        final ImageView imgHeart = findViewById(R.id.post_heart_active);
         final ImageView imgAvatar = (ImageView) findViewById(R.id.avatar);
         final TextView txtPrice = (TextView) findViewById(R.id.price);
         final TextView txtContent = (TextView) findViewById(R.id.content);
@@ -72,6 +69,9 @@ public class PostDetail extends AppCompatActivity {
         final TextView txtDateSignUp = (TextView) findViewById(R.id.date_sign_up);
         final TextView txtAddressUser = (TextView) findViewById(R.id.address_user);
         final TextView txtUserName = (TextView) findViewById(R.id.name_user);
+        btn_call = findViewById(R.id.button_call);
+        btn_sms = findViewById(R.id.button_sms);
+        btn_chat = findViewById(R.id.button_chat);
 
         GetApi getApi = new GetApi(url + post.getId(),getApplication(), new OnEventListener() {
             @SuppressLint("SetTextI18n")
@@ -112,6 +112,8 @@ public class PostDetail extends AppCompatActivity {
             }
         });
 
+
+
         imgHeart.setOnClickListener(new View.OnClickListener() {
             int checked = 0;
             @Override
@@ -119,11 +121,42 @@ public class PostDetail extends AppCompatActivity {
                 if (checked == 0){
                     imgHeart.setImageResource(R.drawable.heart_active);
                     checked = 1;
+                    imgHeart.startAnimation(animation);
                 }
                 else{
                     imgHeart.setImageResource(R.drawable.heart);
                     checked =0;
+                    imgHeart.startAnimation(animation);
+
                 }
+            }
+        });
+
+        btn_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone)));
+            }
+        });
+
+        btn_sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.putExtra("sms_body","" + post.getName());
+                intent.setData(Uri.parse("sms:" + phone));
+                startActivity(intent);
+            }
+        });
+
+        btn_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent= new Intent(v.getContext(), Chat.class);
+
+                intent.putExtra("post", post);
+
+                v.getContext().startActivity(intent);
             }
         });
 

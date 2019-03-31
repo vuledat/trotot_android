@@ -7,4 +7,6 @@
     <string name="title_message">Message</string>
     <string name="met">&#13217;</string>
     <string name="url">http://192.168.0.108/trotot/</string>
+    <string name="nh_p_tin_nh_n">Nhập tin nhắn</string>
+    <string name="chat">chat</string>
 </resources>

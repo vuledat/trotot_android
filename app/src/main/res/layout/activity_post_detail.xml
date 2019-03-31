@@ -12,7 +12,7 @@
         android:id="@+id/post_detail"
         android:layout_width="match_parent"
         android:layout_height="697dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -201,6 +201,60 @@
         </ScrollView>
     </android.support.constraint.ConstraintLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/button_call"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/white_phone"
+            android:text="Gọi điện"
+            android:background="@color/colorGreen"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button_sms"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@color/colorWhite"
+            android:drawableTop="@drawable/white_sms"
+            android:text="SMS"
+            android:textColor="@color/colorGreen"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button_chat"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@color/colorWhite"
+            android:drawableTop="@drawable/ic_message_green_24dp"
+            android:text="Chat"
+            android:textColor="@color/colorGreen"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
     <ProgressBar
         android:id="@+id/progressBarDetail"
         style="?android:attr/progressBarStyle"
@@ -208,10 +262,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/post_detail"
-        app:layout_constraintEnd_toEndOf="@+id/post_detail"
-        app:layout_constraintStart_toStartOf="@+id/post_detail"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 

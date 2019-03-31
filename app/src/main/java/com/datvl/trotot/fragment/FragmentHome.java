@@ -3,6 +3,7 @@ package com.datvl.trotot.fragment;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 //import android.support.v4.app.Fragment;
+import android.app.MediaRouteButton;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +22,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -57,27 +65,48 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         final View view = inflater.inflate(R.layout.activity_home,container,false);
 
         Intent intent = getActivity().getIntent();
-        listPost = (List<Post>) intent.getSerializableExtra("ListPost");
+//        listPost = (List<Post>) intent.getSerializableExtra("ListPost");
+//
+//        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home_view);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+//        ListPostAdapter viewAdapter = new ListPostAdapter(listPost);
+//        recyclerView.setAdapter(viewAdapter);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        ListPostAdapter viewAdapter = new ListPostAdapter(listPost);
-        recyclerView.setAdapter(viewAdapter);
-
+        filter(view);
 
         final BottomNavigationView navigation = (BottomNavigationView) view.findViewById(R.id.navigation);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    // Scrolling up
-                    Log.d("scroll", "scroll ");
-                    navigation.setBehaviorTranslationEnabled(true);
 
-                } else {
-                    // Scrolling down
+        listPost = new ArrayList<>();
+        GetApi getApi = new GetApi(url, getActivity(), new OnEventListener() {
+            @Override
+            public void onSuccess(JSONArray object) {
+                for (int i=0 ; i< object.length() ; i++){
+                    try {
+                        JSONObject jsonObject = object.getJSONObject(i);
+                        listPost.add(new Post(
+                                Integer.parseInt(jsonObject.getString("id")),
+                                jsonObject.getString("name"),
+                                Integer.parseInt(jsonObject.getString("price")) ,
+                                jsonObject.getString("image"),
+                                jsonObject.getString("content"),
+                                jsonObject.getString("address"),
+                                jsonObject.getString("created_at_string"),
+                                Integer.parseInt(jsonObject.getString("scale"))
+                        ));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+                recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home_view);
+                recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                ListPostAdapter viewAdapter = new ListPostAdapter(listPost);
+                recyclerView.setAdapter(viewAdapter);
+                cm.setHideProgress(view, R.id.progressBarHome);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
             }
         });
 
@@ -142,4 +171,32 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
     }
 
+    public void filter(View view) {
+        String arr[]={
+                "Grid View",
+                "List View"};
+        final Spinner spin=(Spinner) view.findViewById(R.id.spinner1);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>
+                (
+                        this.getActivity(),
+                        android.R.layout.simple_spinner_item,
+                        arr
+                );
+        adapter.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        spin.setAdapter(adapter);
+        spin.setSelection(0);
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("DatVL", "onItemSelected: " + parent.getAdapter().getItem(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+//                spin.setSelection(2);
+                Log.d("datVL", "onNothingSelected: ");
+            }
+        });
+    }
 }

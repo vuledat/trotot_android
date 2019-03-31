@@ -24,6 +24,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.datvl.trotot.common.Common;
 import com.datvl.trotot.fragment.FragmentHome;
+import com.datvl.trotot.fragment.FragmentMessage;
+import com.datvl.trotot.fragment.FragmentNotice;
+import com.datvl.trotot.fragment.FragmentSearch;
 import com.datvl.trotot.fragment.FragmentSetting;
 import com.datvl.trotot.post.Post;
 
@@ -65,14 +68,26 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.replace(R.id.content,fragmentHome);
                     fragmentTransaction.commit();
 
-                    pb = findViewById(R.id.progressBar);
-                    pb.setVisibility(View.GONE);
+                    return true;
 
-                    return true;
                 case R.id.navigation_message:
+                    FragmentMessage fragmentMessage = new FragmentMessage();
+                    fragmentTransaction.replace(R.id.content,fragmentMessage);
+                    fragmentTransaction.commit();
                     return true;
+
+                case R.id.navigation_search:
+                    FragmentSearch fragmentSearch = new FragmentSearch();
+                    fragmentTransaction.replace(R.id.content,fragmentSearch);
+                    fragmentTransaction.commit();
+                    return true;
+
                 case R.id.navigation_notifications:
+                    FragmentNotice fragmentNotice = new FragmentNotice();
+                    fragmentTransaction.replace(R.id.content,fragmentNotice);
+                    fragmentTransaction.commit();
                     return true;
+
                 case R.id.navigation_setting:
                     FragmentSetting fragmentSetting = new FragmentSetting();
                     fragmentTransaction.replace(R.id.content,fragmentSetting);
@@ -83,12 +98,22 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
-
+    public void setHideProgress(){
+        pb = findViewById(R.id.progressBarHome);
+        pb.setVisibility(View.GONE);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        getIntent().putExtra("ListPost", (Serializable) listPost);
+        FragmentHome fragmentHome = new FragmentHome();
+        fragmentTransaction.replace(R.id.content,fragmentHome);
+        fragmentTransaction.commit();
 
         GetApi getApi = new GetApi(url, getApplication(), new OnEventListener() {
             @Override

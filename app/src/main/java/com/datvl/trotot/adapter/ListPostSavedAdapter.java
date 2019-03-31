@@ -20,21 +20,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.RecyclerViewHolder>{
+public class ListPostSavedAdapter extends RecyclerView.Adapter<ListPostSavedAdapter.RecyclerViewHolder>{
 
     private List<Post> data = new ArrayList<>();
 
     public static final long MAGIC=86400000L;
     Animation animation;
 
-    public ListPostAdapter(List<Post> data) {
+    public ListPostSavedAdapter(List<Post> data) {
         this.data = data;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_home_grid, parent, false);
+        View view = inflater.inflate(R.layout.item_home, parent, false);
 
          animation = AnimationUtils.loadAnimation(parent.getContext(), R.anim.scale_list);
 //        view.startAnimation(animation);

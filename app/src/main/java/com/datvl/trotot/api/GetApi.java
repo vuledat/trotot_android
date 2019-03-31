@@ -41,7 +41,7 @@ public class GetApi {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Function GetApi:", "Can't connect ");
+                        Log.d("Function GetApi:", "Can't connect " + error);
                     }
                 });
         queue.add(stringRequest);
