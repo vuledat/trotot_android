@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.datvl.trotot.adapter.ListPostAdapter;
 import com.datvl.trotot.api.GetApi;
@@ -77,13 +78,16 @@ public class Login extends AppCompatActivity {
                             if (jsonObject.getString("is_login").equals("ok")) {
                                 String avatar = jsonObject.getString("avatar");
                                 String name = jsonObject.getString("name");
+                                String user_id = jsonObject.getString("id");
+                                editor.putString("user_id", user_id);
+
                                 editor.putString("username", name);
                                 txt_alert.setVisibility(View.VISIBLE);
                                 txt_alert.setText("Dang nhap thanh cong");
                                 pb_login.setVisibility(View.GONE);
                                 editor.putBoolean("is_login", true);
                                 editor.commit();
-
+                                cm.showToast(getApplication(), "Chào mừng " + name + " quay trở lại", Toast.LENGTH_SHORT);
                                 //redirect to MainActiviti
                                 final Intent intent= new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);

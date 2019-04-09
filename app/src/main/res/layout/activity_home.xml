@@ -12,10 +12,30 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="647dp">
 
-        <Spinner
-            android:id="@+id/spinner1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal"
+            android:background="@drawable/template_edit_text_border_grey">
+            <Spinner
+                android:id="@+id/spinner_address"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="30dp" />
+            <Spinner
+                android:id="@+id/spinner_price"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="30dp" />
+            <Spinner
+                android:layout_weight="1"
+                android:id="@+id/spinner_view"
+                android:layout_width="0dp"
+                android:layout_height="30dp" />
+
+
+        </LinearLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/contentViewList"

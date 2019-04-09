@@ -53,7 +53,7 @@ public class ListPostSavedAdapter extends RecyclerView.Adapter<ListPostSavedAdap
         holder.txtUserName.setText(name_sub);
         holder.txtPrice.setText("" + NumberFormat.getFormatedNum((int) price) + " đ");
         holder.txtAddress.setText(address);
-        holder.txtTime.setText(timeAgo + " | ");
+        holder.txtTime.setText(timeAgo + " ");
 
         Picasso.get()
                 .load(data.get(position).getImage())

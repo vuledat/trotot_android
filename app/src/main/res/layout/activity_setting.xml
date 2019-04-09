@@ -36,6 +36,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="5"
+                android:background="?attr/selectableItemBackground"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -97,7 +98,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="10dp">
+                android:paddingTop="10dp"
+                android:background="@drawable/effect"
+                >
 
                 <ImageView
                     android:layout_width="30dp"
@@ -118,6 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@drawable/effect"
                 android:paddingTop="10dp">
 
                 <ImageView

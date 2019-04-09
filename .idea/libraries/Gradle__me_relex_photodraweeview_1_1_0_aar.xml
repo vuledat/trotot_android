@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: me.relex:photodraweeview:1.1.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/photodraweeview-1.1.0.aar/2a9e0b374ae14d6791666f9338786c2a/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/photodraweeview-1.1.0.aar/2a9e0b374ae14d6791666f9338786c2a/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/photodraweeview-1.1.0.aar/eafceaf838da3d09d2dd7a524427f50a/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/photodraweeview-1.1.0.aar/eafceaf838da3d09d2dd7a524427f50a/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

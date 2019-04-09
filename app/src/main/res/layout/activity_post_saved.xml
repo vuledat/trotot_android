@@ -15,10 +15,6 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="647dp">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/list_post_saved"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_post_saved_view"
@@ -26,7 +22,6 @@
                 android:layout_height="match_parent"
                 />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

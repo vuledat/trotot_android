@@ -2,16 +2,14 @@ package com.datvl.trotot.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-//import android.support.v4.app.Fragment;
-import android.app.MediaRouteButton;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.bottomappbar.BottomAppBar;
-import android.support.design.internal.BottomNavigationMenu;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,23 +17,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.datvl.trotot.MainActivity;
 import com.datvl.trotot.OnEventListener;
 import com.datvl.trotot.R;
 import com.datvl.trotot.adapter.ListPostAdapter;
@@ -49,14 +36,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     RecyclerView recyclerView;
     List<Post> listPost;
     Common cm;
-    public String url = cm.getUrlListPosts();
+    SharedPreferences sharedPreferences;
+    public String url;
+    String view_type = "List View";
 
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -64,14 +52,14 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.activity_home,container,false);
 
-        Intent intent = getActivity().getIntent();
-//        listPost = (List<Post>) intent.getSerializableExtra("ListPost");
-//
-//        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home_view);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-//        ListPostAdapter viewAdapter = new ListPostAdapter(listPost);
-//        recyclerView.setAdapter(viewAdapter);
+        sharedPreferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        Boolean is_login = sharedPreferences.getBoolean("is_login", false);
+        url = cm.getUrlListPostsUser() + sharedPreferences.getString("user_id", "0");
+        if ( is_login == false) {
+            url = cm.getUrlListPosts();
+        }
 
+        Intent intent = getActivity().getIntent();
         filter(view);
 
         final BottomNavigationView navigation = (BottomNavigationView) view.findViewById(R.id.navigation);
@@ -91,16 +79,23 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                                 jsonObject.getString("content"),
                                 jsonObject.getString("address"),
                                 jsonObject.getString("created_at_string"),
-                                Integer.parseInt(jsonObject.getString("scale"))
+                                Integer.parseInt(jsonObject.getString("scale")),
+                                jsonObject.has("is_save") ? Integer.parseInt(jsonObject.getString("is_save")) : 0
+
                         ));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home_view);
-                recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                ListPostAdapter viewAdapter = new ListPostAdapter(listPost);
-                recyclerView.setAdapter(viewAdapter);
+
+
+                sharedPreferences = getActivity().getSharedPreferences("fillter", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                view_type = sharedPreferences.getString("view_type", "Grid View");
+                int item_home_grid = R.layout.item_home_grid;
+
+                setLayout(view_type, recyclerView, view);
+
                 cm.setHideProgress(view, R.id.progressBarHome);
             }
 
@@ -140,10 +135,8 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                                         e.printStackTrace();
                                     }
                                 }
-                                recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home_view);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                                ListPostAdapter viewAdapter = new ListPostAdapter(listPost);
-                                recyclerView.setAdapter(viewAdapter);
+                                setLayout(view_type, recyclerView, view);
+
                                 swipeLayout.setRefreshing(false);
                             }
 
@@ -172,30 +165,105 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void filter(View view) {
-        String arr[]={
+        String arr_view_type[]={
                 "Grid View",
                 "List View"};
-        final Spinner spin=(Spinner) view.findViewById(R.id.spinner1);
+        String arr_price_type[]={
+                "Price ⇧",
+                "Price ⇩"};
+        final SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("fillter", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        final Spinner spin=(Spinner) view.findViewById(R.id.spinner_view);
+        final Spinner spin_price=(Spinner) view.findViewById(R.id.spinner_price);
+        String view_type = sharedPreferences.getString("view_type", "Grid View");
+        String price_type = sharedPreferences.getString("price_type", "Price ");
+
+
+        setAdapterSpinner("view",view_type, spin, arr_view_type, editor);
+        setAdapterSpinner("price",price_type, spin_price, arr_price_type, editor);
+    }
+
+    public void reloadFragment(){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentHome fragmentHome = new FragmentHome();
+        fragmentTransaction.replace(R.id.content,fragmentHome);
+        fragmentTransaction.commit();
+    }
+
+    public void setLayout(String view_type, RecyclerView recyclerView, View view){
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home_view);
+        switch (view_type) {
+            case "Grid View":
+                recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                break;
+            case "List View":
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                break;
+        }
+        ListPostAdapter viewAdapter = new ListPostAdapter(listPost);
+        recyclerView.setAdapter(viewAdapter);
+    }
+
+    public void setAdapterSpinner(final String type, String data, Spinner spin, String arr[], final SharedPreferences.Editor editor){
         ArrayAdapter<String> adapter=new ArrayAdapter<String>
                 (
-                        this.getActivity(),
-                        android.R.layout.simple_spinner_item,
-                        arr
+                    this.getActivity(),
+                    android.R.layout.simple_spinner_item,
+                    arr
                 );
         adapter.setDropDownViewResource
                 (android.R.layout.simple_list_item_single_choice);
         spin.setAdapter(adapter);
-        spin.setSelection(0);
+
+        switch (type){
+            case "view":
+                switch (data) {
+                    case "Grid View":
+                        spin.setSelection(0);
+                        break;
+                    case "List View":
+                        spin.setSelection(1);
+                        break;
+                }
+                break;
+            case "price":
+                switch (data) {
+                    case "Price ⇧":
+                        spin.setSelection(0);
+                        break;
+                    case "Price ⇩":
+                        spin.setSelection(1);
+                        break;
+                }
+                break;
+        }
+
+        final int iCurrentSelection = spin.getSelectedItemPosition();
+
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("DatVL", "onItemSelected: " + parent.getAdapter().getItem(position).toString());
+                switch (type){
+                    case "view":
+                        if(iCurrentSelection != position){
+                            editor.putString("view_type", parent.getAdapter().getItem(position).toString());
+                            editor.commit();
+                            reloadFragment();
+                        }
+                        break;
+                    case "price":
+                        if(iCurrentSelection != position){
+                            editor.putString("price_type", parent.getAdapter().getItem(position).toString());
+                            editor.commit();
+                            reloadFragment();
+                        }
+                        break;
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-//                spin.setSelection(2);
-                Log.d("datVL", "onNothingSelected: ");
             }
         });
     }

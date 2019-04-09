@@ -2,8 +2,10 @@ package com.datvl.trotot;
 
 import android.app.FragmentManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.app.FragmentTransaction;
 import android.support.v4.view.MotionEventCompat;
@@ -15,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,6 +31,7 @@ import com.datvl.trotot.fragment.FragmentMessage;
 import com.datvl.trotot.fragment.FragmentNotice;
 import com.datvl.trotot.fragment.FragmentSearch;
 import com.datvl.trotot.fragment.FragmentSetting;
+import com.datvl.trotot.model.Message;
 import com.datvl.trotot.post.Post;
 
 import org.json.JSONArray;
@@ -42,6 +46,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import com.datvl.trotot.api.GetApi;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,18 +66,19 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar pb;
     GetApi getApi;
     String post = null;
+    private FirebaseAuth mAuth;
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+        @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    getIntent().putExtra("ListPost", (Serializable) listPost);
+//                    getIntent().putExtra("ListPost", (Serializable) listPost);
                     FragmentHome fragmentHome = new FragmentHome();
                     fragmentTransaction.replace(R.id.content,fragmentHome);
                     fragmentTransaction.commit();
@@ -102,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         pb = findViewById(R.id.progressBarHome);
         pb.setVisibility(View.GONE);
     }
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +164,14 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+////        FirebaseUser currentUser = mAuth.getCurrentUser();
+////        updateUI(currentUser);
+//    }
 
     public String getFormatedNum(int amount){
         return NumberFormat.getNumberInstance(Locale.US).format(amount);

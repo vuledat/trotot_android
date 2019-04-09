@@ -1,23 +1,42 @@
 package com.datvl.trotot;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.datvl.trotot.adapter.ListMessageAdapter;
+import com.datvl.trotot.api.GetApi;
 import com.datvl.trotot.common.Common;
 import com.datvl.trotot.library.NumberFormat;
+import com.datvl.trotot.model.Message;
 import com.datvl.trotot.post.Post;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,17 +44,97 @@ public class Chat extends AppCompatActivity {
 
     RecyclerView recyclerView;
     List<Post> listPost;
+    List<Message> listMessage;
     Post post;
     Common cm;
-    public String url = cm.getUrlListPostsSaved()+ 1;
     ProgressBar pb;
     Animation animation;
+    private DatabaseReference mDatabase;
+    EditText edtSendMessage;
+    DatabaseReference myRef;
+    private String message_id = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        init();
+        getMessageID();
+        setDefault();
+        getListMessageFirebase();
+        sendMessage();
+    }
+
+    public void init() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        myRef = FirebaseDatabase.getInstance().getReference("message").child("1");
+
+        final SharedPreferences sharedPreferences = getApplication().getSharedPreferences("user", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if ((Boolean) sharedPreferences.getBoolean("is_login", false)) {
+            String username = sharedPreferences.getString("username", "Gest");
+
+        }
+    }
+
+    public int getMessageID(){
+        String url = cm.getMessageID() + 1 + "/" + 2;
+        GetApi getApi = new GetApi(url, getApplication(), new OnEventListener() {
+            @Override
+            public void onSuccess(JSONArray object) {
+                try {
+                    JSONObject jsonObject = object.getJSONObject(0);
+                    message_id = jsonObject.getString("message_id");
+                    Toast.makeText(getApplication(), message_id ,Toast.LENGTH_SHORT);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+        return 1;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void sendMessage() {
+        edtSendMessage = findViewById(R.id.edt_message_content);
+        edtSendMessage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (edtSendMessage.getRight() - 2 * edtSendMessage.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        String content = String.valueOf(edtSendMessage.getText());
+
+                        if (content.equals("")) {
+                            cm.showToast(getApplication(),"Vui lòng nhập tin nhắn",Toast.LENGTH_SHORT);
+                        }
+                        else{
+                            Message message = new Message(content);
+                            mDatabase.child("message").child("1").push().setValue(message);
+                            edtSendMessage.setText("");
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    public void setDefault(){
         animation = AnimationUtils.loadAnimation(getApplication(), R.anim.scale_list);
+        recyclerView = findViewById(R.id.recycler_message_view);
 
         Intent intent = getIntent();
         post = (Post) intent.getSerializableExtra("post");
@@ -81,6 +180,30 @@ public class Chat extends AppCompatActivity {
                     checked =0;
                     imgHeart.startAnimation(animation);
                 }
+            }
+        });
+    }
+
+    public void setListMessage(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ListMessageAdapter viewAdapter = new ListMessageAdapter(listMessage);
+        recyclerView.setAdapter(viewAdapter);
+    }
+
+    public void getListMessageFirebase(){
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listMessage = new ArrayList<>();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Message value = postSnapshot.getValue(Message.class);
+                    listMessage.add(new Message(value.getContent()));
+                }
+                setListMessage();
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w("DatVL", "Failed to read value.", error.toException());
             }
         });
     }
