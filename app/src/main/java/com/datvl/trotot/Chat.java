@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,40 +52,41 @@ public class Chat extends AppCompatActivity {
     EditText edtSendMessage;
     DatabaseReference myRef;
     private String message_id = "0";
+    private String username;
+    private String username2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        init();
         getMessageID();
-        setDefault();
-        getListMessageFirebase();
-        sendMessage();
     }
 
     public void init() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        myRef = FirebaseDatabase.getInstance().getReference("message").child("1");
-
-        final SharedPreferences sharedPreferences = getApplication().getSharedPreferences("user", Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if ((Boolean) sharedPreferences.getBoolean("is_login", false)) {
-            String username = sharedPreferences.getString("username", "Gest");
-
-        }
+        myRef = FirebaseDatabase.getInstance().getReference("message").child(message_id);
     }
 
-    public int getMessageID(){
-        String url = cm.getMessageID() + 1 + "/" + 2;
+    public String getMessageID(){
+        final SharedPreferences sharedPreferences = getApplication().getSharedPreferences("user", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        Intent intent = getIntent();
+        username2 = (String)intent.getSerializableExtra("username2");
+        if ((Boolean) sharedPreferences.getBoolean("is_login", false)) {
+            username = sharedPreferences.getString("username", "Gest");
+        }
+        String url = cm.getMessageID() + username + "/" + username2;
+        Log.d("dat", "getMessageID: " + url);
         GetApi getApi = new GetApi(url, getApplication(), new OnEventListener() {
             @Override
             public void onSuccess(JSONArray object) {
                 try {
                     JSONObject jsonObject = object.getJSONObject(0);
-                    message_id = jsonObject.getString("message_id");
-                    Toast.makeText(getApplication(), message_id ,Toast.LENGTH_SHORT);
+                    message_id = jsonObject.getString("id");
+                    init();
+                    setDefault();
+                    getListMessageFirebase();
+                    sendMessage();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -98,7 +98,7 @@ public class Chat extends AppCompatActivity {
             }
         });
 
-        return 1;
+        return message_id;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -121,7 +121,7 @@ public class Chat extends AppCompatActivity {
                         }
                         else{
                             Message message = new Message(content);
-                            mDatabase.child("message").child("1").push().setValue(message);
+                            mDatabase.child("message").child(message_id).push().setValue(message);
                             edtSendMessage.setText("");
                         }
                         return true;

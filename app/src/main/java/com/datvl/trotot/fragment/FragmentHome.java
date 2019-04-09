@@ -44,7 +44,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     Common cm;
     SharedPreferences sharedPreferences;
     public String url;
-    String view_type = "List View";
+    String view_type;
 
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -89,9 +89,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
 
 
-                sharedPreferences = getActivity().getSharedPreferences("fillter", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("fillter", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                view_type = sharedPreferences.getString("view_type", "Grid View");
+                view_type = sharedPreferences.getString("view_type", "List View");
                 int item_home_grid = R.layout.item_home_grid;
 
                 setLayout(view_type, recyclerView, view);

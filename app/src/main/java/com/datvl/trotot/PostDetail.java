@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +40,7 @@ public class PostDetail extends AppCompatActivity {
     ConstraintLayout postDetail;
     ProgressBar pb;
     Animation animation;
+    String created_by;
 
 
     @SuppressLint("WrongConstant")
@@ -98,7 +100,7 @@ public class PostDetail extends AppCompatActivity {
                     txtAddressUser.setText("" + jsonObject.getString("user_address"));
                     txtUserName.setText("" + jsonObject.getString("user_name"));
                     phone = jsonObject.getString("user_phone");
-
+                    created_by = jsonObject.getString("user_name");
                     postDetail.setVisibility(View.VISIBLE);
                     pb.setVisibility(View.GONE);
 
@@ -155,6 +157,7 @@ public class PostDetail extends AppCompatActivity {
                 final Intent intent= new Intent(v.getContext(), Chat.class);
 
                 intent.putExtra("post", post);
+                intent.putExtra("username2", created_by);
 
                 v.getContext().startActivity(intent);
             }
