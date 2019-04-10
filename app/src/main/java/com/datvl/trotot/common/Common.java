@@ -10,8 +10,8 @@ import com.datvl.trotot.R;
 public class Common {
 //    static String ip = "192.168.1.78";
 //    static String ip = "192.168.0.113";
-//    static String ip = "192.168.0.108";
-    static String ip = "192.168.43.230";
+    static String ip = "192.168.8.104";
+//    static String ip = "192.168.43.230";
 //    static String ip = "192.168.137.186";
 
     public static String getUrlLogin() {

@@ -88,7 +88,6 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                     }
                 }
 
-
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("fillter", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 view_type = sharedPreferences.getString("view_type", "List View");

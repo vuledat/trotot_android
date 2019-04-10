@@ -28,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -75,28 +76,34 @@ public class Chat extends AppCompatActivity {
         if ((Boolean) sharedPreferences.getBoolean("is_login", false)) {
             username = sharedPreferences.getString("username", "Gest");
         }
-        String url = cm.getMessageID() + username + "/" + username2;
-        Log.d("dat", "getMessageID: " + url);
-        GetApi getApi = new GetApi(url, getApplication(), new OnEventListener() {
-            @Override
-            public void onSuccess(JSONArray object) {
-                try {
-                    JSONObject jsonObject = object.getJSONObject(0);
-                    message_id = jsonObject.getString("id");
-                    init();
-                    setDefault();
-                    getListMessageFirebase();
-                    sendMessage();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        if (username.equals(username2)) {
+            setDefault();
+            edtSendMessage = findViewById(R.id.edt_message_content);
+            edtSendMessage.setVisibility(View.GONE);
+        }
+        else{
+            String url = cm.getMessageID() + username + "/" + username2;
+            GetApi getApi = new GetApi(url, getApplication(), new OnEventListener() {
+                @Override
+                public void onSuccess(JSONArray object) {
+                    try {
+                        JSONObject jsonObject = object.getJSONObject(0);
+                        message_id = jsonObject.getString("id");
+                        init();
+                        setDefault();
+                        getListMessageFirebase();
+                        sendMessage();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Exception e) {
+                @Override
+                public void onFailure(Exception e) {
 
-            }
-        });
+                }
+            });
+        }
 
         return message_id;
     }
@@ -120,7 +127,7 @@ public class Chat extends AppCompatActivity {
                             cm.showToast(getApplication(),"Vui lòng nhập tin nhắn",Toast.LENGTH_SHORT);
                         }
                         else{
-                            Message message = new Message(content);
+                            Message message = new Message(content, "10-04-2019", username);
                             mDatabase.child("message").child(message_id).push().setValue(message);
                             edtSendMessage.setText("");
                         }
@@ -154,7 +161,7 @@ public class Chat extends AppCompatActivity {
         String address = post.getAddress();
         String timeAgo = post.getTime();
 
-        setTitle(name);
+        setTitle(username2);
 
         txtUserName.setText(name_sub);
         txtPrice.setText("" + NumberFormat.getFormatedNum((int) price) + " đ");
@@ -197,7 +204,7 @@ public class Chat extends AppCompatActivity {
                 listMessage = new ArrayList<>();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Message value = postSnapshot.getValue(Message.class);
-                    listMessage.add(new Message(value.getContent()));
+                    listMessage.add(new Message(value.getContent(), value.getTime(), value.getUser()));
                 }
                 setListMessage();
             }
