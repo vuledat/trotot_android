@@ -5,52 +5,52 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.datvl.trotot.R;
-
 public class Common {
 //    static String ip = "192.168.1.78";
 //    static String ip = "192.168.0.113";
 //    static String ip = "192.168.0.108";
-    static String ip = "192.168.43.230";
-//    static String ip = "192.168.137.186";
+//    static String ip = "192.168.56.1";
+    static String ip = "192.168.0.186";
+//    static String prefix = "/trotot/public/";
+    static String prefix = "/";
 
     public static String getUrlLogin() {
-        String url = "http://" + ip + "/trotot/public/login/";
+        String url = "http://" + ip + prefix + "login/";
         return url;
     }
 
     public static String getUrlListPosts() {
-        String url = "http://" + ip + "/trotot/public/list-posts";
+        String url = "http://" + ip + prefix + "list-posts";
         return url;
     }
 
     public static String getUrlListPostsUser() {
-        String url = "http://" + ip + "/trotot/public/list-posts-users/";
+        String url = "http://" + ip + prefix + "list-posts-users/";
         return url;
     }
 
     public static String getUrlListPostsSaved() {
-        String url = "http://" + ip + "/trotot/public/list-posts-saved/";
+        String url = "http://" + ip + prefix + "list-posts-saved/";
         return url;
     }
 
     public static String getUrlPost() {
-        String url = "http://" + ip + "/trotot/public/post/";
+        String url = "http://" + ip + prefix + "post/";
         return url;
     }
 
     public static String getUrlPostSaved() {
-        String url = "http://" + ip + "/trotot/public/post-saved/";
+        String url = "http://" + ip + prefix +"post-saved/";
         return url;
     }
 
     public static String getUrlDelete() {
-        String url = "http://" + ip + "/trotot/public/delete-post-saved/";
+        String url = "http://" + ip + prefix + "delete-post-saved/";
         return url;
     }
 
     public static String getMessageID() {
-        String url = "http://" + ip + "/trotot/public/message-id/";
+        String url = "http://" + ip + prefix + "message-id/";
         return url;
     }
 
@@ -61,6 +61,11 @@ public class Common {
 
     public static void showToast(Context view, String message, int time){
         Toast.makeText(view, message, time).show();
+    }
+
+    public static String getUrlNewPost() {
+        String url = "http://" + ip + prefix + "new-post";
+        return url;
     }
 
 }

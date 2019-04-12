@@ -21,8 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
+import com.datvl.trotot.NewPostActivity;
 import com.datvl.trotot.OnEventListener;
 import com.datvl.trotot.R;
 import com.datvl.trotot.adapter.ListPostAdapter;
@@ -45,6 +47,8 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     SharedPreferences sharedPreferences;
     public String url;
     String view_type = "List View";
+    private Button btnNewPost;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -58,6 +62,15 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         if ( is_login == false) {
             url = cm.getUrlListPosts();
         }
+
+        btnNewPost = view.findViewById(R.id.btn_new_post);
+        btnNewPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NewPostActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Intent intent = getActivity().getIntent();
         filter(view);
