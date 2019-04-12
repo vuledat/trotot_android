@@ -65,6 +65,12 @@
                 android:value=".PostDetail" />
         </activity>
 
+        <activity
+            android:name=".NewPostActivity"
+            android:label="NewPost"
+            android:theme="@style/AppTheme">
+        </activity>
+
     </application>
 
 </manifest>
